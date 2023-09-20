@@ -3,8 +3,22 @@
 <head>
   <title>Picture Downloader</title>
   <script src="popup.js"></script>
+  <link rel="stylesheet" href="popup.css"></link>
 </head>
 <body>
-  <button id="downloadButton">Download Pictures</button>
+  <div class = "upper">
+    <button style="width: 200px; height: 200px;" id="downloadButtonWindow">Download pictures from current window</button>
+    <button style="width: 200px; height: 200px;" id="downloadButtonActive">Download pictrues from current tab</button>
+  </div>
+  <div class = "center">
+    <input type="range" id="minSlider" min="0" max="8000" step="2" value="400">
+    <input type="text" id="minSliderInput">
+
+    <input type="range" id="maxSlider" min="0" max="8000" step="2" value="8000">
+    <input type="text" id="maxSliderInput">
+
+    <div id="minSliderValue">Minimum size of downloaded pictures: 0 px</div>
+    <div id="maxSliderValue">Maximum size of downloaded pictures: 8000 px</div>
+  </div>
 </body>
 </html>

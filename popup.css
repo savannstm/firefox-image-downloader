@@ -1,0 +1,20 @@
+body 
+{
+    background-color: #77b5fe;
+    margin: 0; 
+}
+.upper
+{
+    text-align: start; 
+    padding: 20px; 
+}
+.lower
+{
+    text-align: end;
+    padding: 20px;
+}
+.center
+{
+    text-align: center;
+    padding: 20px;
+}
