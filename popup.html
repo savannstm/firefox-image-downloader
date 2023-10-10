@@ -1,24 +1,51 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Picture Downloader</title>
-  <script src="popup.js"></script>
-  <link rel="stylesheet" href="popup.css"></link>
-</head>
-<body>
-  <div class = "upper">
-    <button style="width: 200px; height: 200px;" id="downloadButtonWindow">Download pictures from current window</button>
-    <button style="width: 200px; height: 200px;" id="downloadButtonActive">Download pictrues from current tab</button>
-  </div>
-  <div class = "center">
-    <input type="range" id="minSlider" min="0" max="8000" step="2" value="400">
-    <input type="text" id="minSliderInput">
+  <head>
 
-    <input type="range" id="maxSlider" min="0" max="8000" step="2" value="8000">
-    <input type="text" id="maxSliderInput">
+    <title>Picture Downloader</title>
+    <script src="popup.js"></script>
+    <link rel="stylesheet" href="popup.css"></link>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  </head>
 
-    <div id="minSliderValue">Minimum size of downloaded pictures: 0 px</div>
-    <div id="maxSliderValue">Maximum size of downloaded pictures: 8000 px</div>
-  </div>
+    <div>
+      <p>To allow this extension downloading pictures from all tabs of current window, open a new tab and type "about:addons" into the address bar, and allow "Access your data for all websites" for this extension.</p>
+      <p>Unless you do it, the "Download pictures from current window" option simply won't work.</p>
+      <hr>
+      <button id="downloadButtonWindow">Download pictures from current window</button>
+      <button id="downloadButtonActive">Download pictures from current tab</button>
+      <hr><br>
+
+    </div>
+
+    <div class = "center">
+
+      <div id="minSliderValue" style="color: white">Minimum size of downloaded pictures: 0 px</div> 
+      <input type="range" id="minSlider" min="0" max="8000" step="2" value="400">
+      <input type="text" id="minSliderInput">
+      <br><br>
+      <div id="maxSliderValue" style="color: white">Maximum size of downloaded pictures: 8000 px</div>
+      <input type="range" id="maxSlider" min="0" max="8000" step="2" value="8000">
+      <input type="text" id="maxSliderInput">
+      <br>
+
+    </div>
+    <p>If you're having issues with this extension, report any problems to author, using email from the Mozilla Addons extension page.</p>
+    
+    <a href="#" style="text-align: right; color: white" id="show-options">Show Options</a>
+
+        <div id="options" style="display: none;">
+
+            <label for="option1">Minimum size (min: 0, max: 8000):</label>
+            <input type="text" id="option1">
+            <br>
+            <label for="option2">Maximum size (min: 0, max: 8000):</label>
+            <input type="text" id="option2">
+
+        </div>
+
 </body>
+
 </html>

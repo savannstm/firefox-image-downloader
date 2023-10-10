@@ -1,151 +1,175 @@
-document.addEventListener("DOMContentLoaded", function()
+document.addEventListener("DOMContentLoaded", async function()
 {
-    const minSlider = document.getElementById("minSlider");
-    const minSliderInput = document.getElementById("minSliderInput");
-    const minSliderOutput = document.getElementById("minSliderValue");
-    minSlider.value = 400;
-    minSliderOutput.textContent = "Minimum size of downloaded pictures: " + minSlider.value + " px";
-    minSliderInput.value = minSlider.value;
-    minSlider.addEventListener("input", function()
+    var showOptionsLink = document.getElementById("show-options");
+    var optionsDiv = document.getElementById("options");
+
+    showOptionsLink.addEventListener("click", function() 
     {
-        const value = minSlider.value;
-        minSliderOutput.textContent = "Minimum size of downloaded pictures: " + value + " px";
-        minSliderInput.value = value;
-    });
-    minSliderInput.addEventListener("input", function()
-    {
-        const value = parseInt(minSliderInput.value);
-        if (!isNaN(value))
+        if (optionsDiv.style.display === "none" || optionsDiv.style.display === "") 
         {
-            minSlider.value = value;
-            minSliderOutput.textContent = "Minimum size of downloaded pictures: " + value + " px";
-        }
-    });
-    const maxSlider = document.getElementById("maxSlider");
-    const maxSliderInput = document.getElementById("maxSliderInput");
-    const maxSliderOutput = document.getElementById("maxSliderValue");
-    // Set the default maximum value to 8000
-    maxSlider.value = 8000;
-    maxSliderOutput.textContent = "Maximum size of downloaded pictures: " + maxSlider.value + " px";
-    maxSliderInput.value = maxSlider.value;
-    maxSlider.addEventListener("input", function()
-    {
-        const value = maxSlider.value;
-        maxSliderOutput.textContent = "Maximum size of downloaded pictures: " + value + " px";
-        maxSliderInput.value = value;
-    });
-    maxSliderInput.addEventListener("input", function()
-    {
-        const value = parseInt(maxSliderInput.value);
-        if (!isNaN(value))
+            optionsDiv.style.display = "block";
+            showOptionsLink.textContent = "Hide Options";
+        } 
+        else 
         {
-            maxSlider.value = value;
-            maxSliderOutput.textContent = "Maximum size of downloaded pictures: " + value + " px";
+            optionsDiv.style.display = "none";
+            showOptionsLink.textContent = "Show Options";
         }
     });
 
-    function extractImageLinks(htmlCode)
+    function updateSliderValue(slider, input, io, output)
     {
-        const imageLinks = [];
-        const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = htmlCode;
-        const imgElements = tempDiv.getElementsByTagName('img');
-        for (const img of imgElements)
+        const value = parseInt(slider.value);
+        if (!isNaN(value))
         {
-            const src = img.getAttribute('src');
-            if (src && !src.endsWith('.gif'))
-            {
-                imageLinks.push(src);
-            }
+            input.value = value;
+            output.textContent = `${io.getAttribute("data-label")}: ${value} px`;
         }
-        return imageLinks;
     }
-    async function downloadFile(url)
+
+    function sendMessageToBackground(active)
     {
-        const downloadItem = browser.downloads.download(
+        const minSliderInt = parseInt(minSlider.value);
+        const maxSliderInt = parseInt(maxSlider.value);
+        browser.runtime.sendMessage(
         {
-            url: url,
-            saveAs: false,
+            action: "downloadImagesFromTabs",
+            queryargument: active ?
+            {
+                active: true
+            } :
+            {
+                currentWindow: true
+            },
+            minSliderInt,
+            maxSliderInt
         });
     }
-    async function getImageDimensions(link)
+
+    
+    const minSlider = document.getElementById("minSlider");
+    const minSliderInput = document.getElementById("minSliderInput");
+    const minSliderOutput = document.getElementById("minSliderValue");
+    const minGotten = (await browser.storage.local.get("minStored")).minStored
+    minSlider.value = 400;
+    if (!isNaN(minGotten))
     {
-        const img = new Image();
-        img.src = link;
-        await img.decode();
-        const width = img.width;
-        return width;
+        minSlider.value = minGotten;
     }
-    async function downloadImagesFromTabs(queryargument)
+
+    minSliderInput.value = minSlider.value;
+    minSliderInput.setAttribute("data-label", "Minimum size of downloaded pictures");
+    updateSliderValue(minSlider, minSliderInput, minSliderInput, minSliderOutput);
+
+    minSlider.addEventListener("input", function()
     {
-        const tabs = await browser.tabs.query(queryargument);
-        console.log("Here's a list of all the tabs:")
-        console.log(tabs)
-        for await (const tab of tabs)
+        updateSliderValue(minSlider, minSliderInput, minSliderInput, minSliderOutput);
+    });
+
+    minSliderInput.addEventListener("input", function()
+    {
+        if (minSliderInput.value < 0)
         {
-            console.log(tab)
-            const tabId = tab.id;
-            const results = await browser.scripting.executeScript(
-            {
-                target:
-                {
-                    tabId: tabId
-                },
-                func: () =>
-                {
-                    return document.documentElement.outerHTML;
-                }
-            });
-            console.log("Here's a results array:")
-            console.log(results)
-            for (const result of results)
-            {
-                const htmlCode = result.result;
-                const imageLinks = extractImageLinks(htmlCode);
-                console.log("Here's a list of all links to the images:");
-                console.log(imageLinks)
-                const maxSliderInt = parseInt(maxSlider.value);
-                const minSliderInt = parseInt(minSlider.value);
-                for (let link of imageLinks)
-                {
-                    if (!link.startsWith("http://") && !link.startsWith("https://"))
-                    {
-                        link = "http://" + link;
-                    }
-                    try
-                    {
-                        if (await getImageDimensions(link) > minSliderInt && await getImageDimensions(link) < maxSliderInt)
-                        {
-                            console.log("Downloading: " + link);
-                            await downloadFile(link);
-                        }
-                    }
-                    catch (error)
-                    {
-                        console.log("Error while processing: " + link + " - " + error);
-                    }
-                    finally
-                    {
-                        console.log("Continuing loop...");
-                    }
-                }
-            }
+            minSliderInput.value = 0;
         }
+        if (minSliderInput.value > 8000)
+        {
+            minSliderInput.value = 8000
+        }
+        updateSliderValue(minSliderInput, minSlider, minSliderInput, minSliderOutput);
+    });
+
+    const maxSlider = document.getElementById("maxSlider");
+    const maxSliderInput = document.getElementById("maxSliderInput");
+    const maxSliderOutput = document.getElementById("maxSliderValue");
+    const maxGotten = (await browser.storage.local.get("maxStored")).maxStored
+    maxSlider.value = 8000;
+    if (!isNaN(maxGotten))
+    {
+        maxSlider.value = maxGotten;
     }
+
+    maxSliderInput.value = maxSlider.value;
+    maxSliderInput.setAttribute("data-label", "Maximum size of downloaded pictures");
+    updateSliderValue(maxSlider, maxSliderInput, maxSliderInput, maxSliderOutput);
+
+    maxSlider.addEventListener("input", function()
+    {
+        updateSliderValue(maxSlider, maxSliderInput, maxSliderInput, maxSliderOutput);
+    });
+
+    maxSliderInput.addEventListener("input", function()
+    {
+        if (maxSliderInput.value < 0)
+        {
+            maxSliderInput.value = 0;
+        }
+        if (maxSliderInput.value > 8000)
+        {
+            maxSliderInput.value = 8000
+        }
+        updateSliderValue(maxSliderInput, maxSlider, maxSliderInput, maxSliderOutput);
+    });
+
+    const minValue = document.getElementById("option1")
+    minValue.addEventListener("input", async function() 
+    {
+        if (!isNaN(minValue.value))
+        {
+            if (minValue.value < 0)
+            {
+                minValue.value = 0;
+            }
+            if (minValue.value > 8000)
+            {
+                minValue.value = 8000
+            }
+            await browser.storage.local.set({"minStored": minValue.value});
+            minSlider.value = minValue.value;
+            minSliderInput.value = minValue.value;
+            document.getElementById("minSliderValue").textContent = `${minSliderInput.getAttribute("data-label")}: ${minValue.value} px`;
+        }
+    })
+    if (!isNaN(minGotten))
+    {
+        minSlider.value = minGotten;
+        minValue.value = minGotten;
+    }
+
+    const maxValue = document.getElementById("option2")
+    maxValue.addEventListener("input", async function()
+    {
+        if (!isNaN(maxValue.value))
+        {
+            if (maxValue.value < 0)
+            {
+                maxValue.value = 0;
+            }
+            if (maxValue.value > 8000)
+            {
+                maxValue.value = 8000
+            }
+            await browser.storage.local.set({"maxStored": maxValue.value});
+            maxSlider.value = maxValue.value;
+            maxSliderInput.value = maxValue.value;
+            document.getElementById("maxSliderValue").textContent = `${maxSliderInput.getAttribute("data-label")}: ${maxValue.value} px`;
+        }
+    })
+    if (!isNaN(maxGotten))
+    {
+        maxSlider.value = maxGotten;
+        maxValue.value = maxGotten;
+    }
+
     const downloadButtonWindow = document.getElementById("downloadButtonWindow");
     downloadButtonWindow.addEventListener("click", function()
     {
-        downloadImagesFromTabs(
-        {
-            currentWindow: true,
-        });
+        sendMessageToBackground(false);
     });
-    const downloadButtonActive = document.getElementById("downloadButtonActive")
+
+    const downloadButtonActive = document.getElementById("downloadButtonActive");
     downloadButtonActive.addEventListener("click", function()
     {
-        downloadImagesFromTabs(
-        {
-            active: true
-        })
-    })
+        sendMessageToBackground(true);
+    });
 });

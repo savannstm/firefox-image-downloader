@@ -1,20 +1,117 @@
-body 
+html
 {
-    background-color: #77b5fe;
-    margin: 0; 
+    font-family: "roboto", sans-serif;
+    width: auto;
+    height: auto;
+    align-content: center;
+    text-align: center;
+    margin: auto;
+    background-color: #5A5A5A;
+    padding: 16px;
+    padding-top: 4px;
+    padding-bottom: 4px;
 }
+
 .upper
 {
-    text-align: start; 
-    padding: 20px; 
+    text-align: start;
 }
 .lower
 {
     text-align: end;
-    padding: 20px;
 }
 .center
 {
     text-align: center;
-    padding: 20px;
+}
+.right
+{
+    text-align: right;
+}
+
+label
+{
+    color: white;
+}
+hr
+{
+    height: 5px;
+    border-bottom: 16px;
+    background-color: grey;
+    border-radius: 16px;
+    border-right: none;
+    border-left: none;
+    border-top: none;
+}
+
+button
+{
+    width: 40vw;
+    height: 150px;
+    text-align: center;
+    align-content: center;
+    color: white;
+    background-color: grey;
+    border: none;
+    font-size: 16px;
+}
+p
+{
+    font-size: 16px; 
+    color: white;
+}
+button:hover
+{
+    background-color: darkgrey
+}
+
+button:active
+{
+    background-color: white
+}
+
+input[type="text"]
+{
+    background: grey; 
+    border: black;
+    border-radius: 4px;
+    color: white;
+}
+input[type="text"]:focus
+{
+    background: #707070;
+    outline-style: solid;
+    outline-width: 2px;
+    outline-color: darkgrey;
+}
+
+input[type="range"]
+{
+    transform: TranslateY(5px);
+    width: 40vw;
+    background: none;
+    border-radius: 16px;
+    border: red
+}
+
+::-moz-range-thumb
+{
+    width: 16px;
+    height: 16px;
+    border-style: none;
+    border-radius: 16px;
+}
+
+::-moz-range-progress
+{
+    background-color: white;
+    border-radius: 16px;
+    height: 5px;
+}
+
+::-moz-range-track
+{
+    background-color: grey;
+    height: 5px;
+    border-radius: 16px;
 }
