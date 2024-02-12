@@ -32,12 +32,13 @@ async function getImageDimensions(link)
 
     img.src = link;
     await img.decode();
-    
+
     const width = img.width;
     return width;
 }
 
-async function downloadImagesFromTabs(queryargument, minSliderInt, maxSliderInt)
+async function downloadImagesFromTabs(queryargument, minSliderInt,
+    maxSliderInt)
 {
     const tabs = await browser.tabs.query(queryargument);
     for await (const tab of tabs)
@@ -54,13 +55,16 @@ async function downloadImagesFromTabs(queryargument, minSliderInt, maxSliderInt)
                 },
                 func: () =>
                 {
-                    return document.documentElement.outerHTML;
+                    return document.documentElement
+                        .outerHTML;
                 }
             });
         }
         catch (error)
         {
-            console.error(error + "\nEither you have new tab or any of \'about:\' tabs opened \nOr you didn't give permission to access data for all websites at \'about:addons\'")
+            console.error(error,
+                "\nEither you have new tab or any of \'about:\' tabs opened \nOr you didn't give permission to access data for all websites at \'about:addons\'"
+            )
         }
         if (results !== undefined)
         {
@@ -69,26 +73,40 @@ async function downloadImagesFromTabs(queryargument, minSliderInt, maxSliderInt)
                 if (result !== undefined)
                 {
                     const htmlCode = result.result;
-                    const imageLinks = extractImageLinks(htmlCode);
-                    console.log("Here's a list of all links to the images:");
-                    console.log(imageLinks)
+                    const imageLinks = extractImageLinks(
+                        htmlCode);
+                    console.log(
+                        "Here's a list of all links to the images:",
+                        imageLinks
+                    );
                     for (let link of imageLinks)
                     {
-                        if (!link.startsWith("http://") && !link.startsWith("https://"))
+                        if (!link.startsWith("http://") && !link
+                            .startsWith("https://"))
                         {
                             link = "http://" + link;
                         }
                         try
                         {
-                            if (await getImageDimensions(link) > minSliderInt && await getImageDimensions(link) < maxSliderInt)
+                            if (await getImageDimensions(link) >
+                                minSliderInt &&
+                                await getImageDimensions(link) <
+                                maxSliderInt)
                             {
-                                console.log("Downloading: " + link);
+                                console.log("Downloading: ",
+                                    link);
                                 await downloadFile(link);
                             }
+                            else
+                            {
+                                console.log("Skipped: ", link);
+                            };
                         }
                         catch (error)
                         {
-                            console.log("Error while processing: " + link + " - " + error);
+                            console.log(
+                                "Error while processing: ",
+                                link + " - " + error);
                         }
                         finally
                         {
@@ -98,15 +116,17 @@ async function downloadImagesFromTabs(queryargument, minSliderInt, maxSliderInt)
                 }
                 else
                 {
-                    console.warn("Looks like one of your pages doesn't contain any HTML code \nIf it happens wrongly, contact the developer using the email from firefox addons page.");
+                    console.warn(
+                        "Looks like one of your pages doesn't contain any HTML code \nIf it happens wrongly, contact the developer using the email from firefox addons page."
+                    );
                 }
             }
         }
     }
-    console.log("Loop has successfully ended.")
-}
+    console.log("Loop has ended.");
+};
 
-browser.runtime.onMessage.addListener(function(message)
+browser.runtime.onMessage.addListener((message) =>
 {
     if (message.action === "downloadImagesFromTabs")
     {
@@ -117,6 +137,7 @@ browser.runtime.onMessage.addListener(function(message)
             maxSliderInt
         } = message;
 
-        downloadImagesFromTabs(queryargument, minSliderInt, maxSliderInt);
-    }
+        downloadImagesFromTabs(queryargument, minSliderInt,
+            maxSliderInt);
+    };
 });

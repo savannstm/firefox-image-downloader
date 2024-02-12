@@ -1,18 +1,22 @@
-<!DOCTYPE html>
+<!DOCTYPE html> <meta charset="UTF-8">
+
 <html>
+
   <head>
 
     <title>Picture Downloader</title>
     <script src="popup.js"></script>
-    <link rel="stylesheet" href="popup.css"></link>
+    <link rel="stylesheet" href="popup.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+
   </head>
 
+  <body>
+
     <div>
-      <p>To allow this extension downloading pictures from all tabs of current window, open a new tab and type "about:addons" into the address bar, and allow "Access your data for all websites" for this extension.</p>
-      <p>Unless you do it, the "Download pictures from current window" option simply won't work.</p>
+
       <hr>
       <button id="downloadButtonWindow">Download pictures from current window</button>
       <button id="downloadButtonActive">Download pictures from current tab</button>
@@ -22,7 +26,7 @@
 
     <div class = "center">
 
-      <div id="minSliderValue" style="color: white">Minimum size of downloaded pictures: 0 px</div> 
+      <div id="minSliderValue" style="color: white">Minimum size of downloaded pictures: 0 px</div>
       <input type="range" id="minSlider" min="0" max="8000" step="2" value="400">
       <input type="text" id="minSliderInput">
       <br><br>
@@ -32,20 +36,29 @@
       <br>
 
     </div>
-    <p>If you're having issues with this extension, report any problems to author, using email from the Mozilla Addons extension page.</p>
-    
-    <a href="#" style="text-align: right; color: white" id="show-options">Show Options</a>
 
-        <div id="options" style="display: none;">
+    <p id="issues-msg">If you're having issues with this extension, report any problems to author, using email from the Mozilla Addons extension page.</p>
 
-            <label for="option1">Minimum size (min: 0, max: 8000):</label>
-            <input type="text" id="option1">
-            <br>
-            <label for="option2">Maximum size (min: 0, max: 8000):</label>
-            <input type="text" id="option2">
+    <a href="#" style="color: white;" id="show-options">Show Options</a>
 
-        </div>
+      <div id="options" style="display: none; position: absolute; margin-left: auto; text-align: left;">
+        
+        <br>
+        <label for="option1" id="option1-text">Minimum size (min: 0, max: 8000):</label>
+        <input type="text" id="option1">
+        <br>
+        <label for="option2" id="option2-text">Maximum size (min: 0, max: 8000):</label>
+        <input type="text" id="option2">
 
-</body>
+      </div>
+
+    <select id="lang" style="position: absolute; right: 20px; background: grey; border: none; color: white">
+
+      <option value="ru">Русский/Russian</option>
+      <option value="en-US">English/Английский</option>
+
+    </select>
+
+  </body>
 
 </html>

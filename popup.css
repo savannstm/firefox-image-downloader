@@ -2,11 +2,11 @@ html
 {
     font-family: "roboto", sans-serif;
     width: auto;
-    height: auto;
+    height: 470px;
     align-content: center;
     text-align: center;
     margin: auto;
-    background-color: #5A5A5A;
+    background-color: #5a5a5a;
     padding: 16px;
     padding-top: 4px;
     padding-bottom: 4px;
@@ -16,14 +16,17 @@ html
 {
     text-align: start;
 }
+
 .lower
 {
     text-align: end;
 }
+
 .center
 {
     text-align: center;
 }
+
 .right
 {
     text-align: right;
@@ -33,6 +36,7 @@ label
 {
     color: white;
 }
+
 hr
 {
     height: 5px;
@@ -46,7 +50,7 @@ hr
 
 button
 {
-    width: 40vw;
+    width: 45vw;
     height: 150px;
     text-align: center;
     align-content: center;
@@ -55,11 +59,13 @@ button
     border: none;
     font-size: 16px;
 }
+
 p
 {
-    font-size: 16px; 
+    font-size: 16px;
     color: white;
 }
+
 button:hover
 {
     background-color: darkgrey
@@ -72,11 +78,12 @@ button:active
 
 input[type="text"]
 {
-    background: grey; 
+    background: grey;
     border: black;
     border-radius: 4px;
     color: white;
 }
+
 input[type="text"]:focus
 {
     background: #707070;
@@ -87,11 +94,11 @@ input[type="text"]:focus
 
 input[type="range"]
 {
-    transform: TranslateY(5px);
     width: 40vw;
     background: none;
+    border: red;
     border-radius: 16px;
-    border: red
+    transform: TranslateY(5px);
 }
 
 ::-moz-range-thumb
@@ -104,14 +111,19 @@ input[type="range"]
 
 ::-moz-range-progress
 {
+    height: 5px;
     background-color: white;
     border-radius: 16px;
-    height: 5px;
 }
 
 ::-moz-range-track
 {
-    background-color: grey;
     height: 5px;
+    background-color: grey;
     border-radius: 16px;
+}
+
+select::-ms-backdrop
+{
+    appearance: none;
 }
